@@ -10,7 +10,7 @@ class Game:
         self.cell_size = cell_size
         self.fps = fps
         self.map = Map(self.cell_size, map_path)
-        self.robot = Robot(self.map.robot_position, self.cell_size)
+        self.robot = Robot(self.map.robot_inicial_cell)
 
         # default
         self.default_background_color = (64,64,64)
@@ -52,6 +52,7 @@ class Game:
     def draw(self) -> None:
         self.screen.fill(self.default_background_color)
         self.map.draw(self.screen)
+        self.robot.draw(self.screen)
         pg.display.update()
 
     def start(self) -> None:
