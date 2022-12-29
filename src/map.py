@@ -1,4 +1,5 @@
 from src.cell import Cell
+from src.direction import Directions
 
 import pygame as pg
 
@@ -18,10 +19,7 @@ class Map:
         self.show_grid = True
         self.lines = self.generate_grid_lines()
 
-        
-     
-    
-    def valide_map(self, map:list[list]) -> bool:
+    def valide_map(self, map: list[list]) -> bool:
         pass
     
     def generate_grid_lines(self) -> None:
@@ -46,7 +44,6 @@ class Map:
 
         return lines
         
-
     def load_map(self) -> list:
         with open(self.file_path,"r") as file:
             content = file.readlines()
@@ -66,6 +63,9 @@ class Map:
                 row.append(cell)
             map.append(row)
         return map
+    
+    def get_valid_moves(self, position: tuple) -> list[Directions]:
+        pass
 
     
     def draw(self, surface: pg.Surface) -> None:
