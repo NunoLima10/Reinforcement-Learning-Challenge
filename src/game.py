@@ -1,16 +1,17 @@
 from src.map import Map
 from src.robot import Robot
+from src.direction import Directions
 
 import pygame as pg
 
 class Game:
-    def __init__(self, title: str, map_path: str, cell_size: int , fps: int = 30) -> None:
+    def __init__(self, title: str, map_path: str, cell_size: int , fps: int = 5) -> None:
         self.title =  title
         self.map_path = map_path
         self.cell_size = cell_size
         self.fps = fps
         self.map = Map(self.cell_size, map_path)
-        self.robot = Robot(self.map.robot_inicial_cell)
+        self.robot = Robot(self.map)
 
         # default
         self.default_background_color = (64,64,64)
@@ -43,9 +44,23 @@ class Game:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.close()
-            
+
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_UP:
+                    self.robot.step(Directions.NORTH)
+
+                if event.key == pg.K_DOWN:
+                    self.robot.step(Directions.SOUTH)
+
+                if event.key == pg.K_LEFT:
+                    self.robot.step(Directions.WEST)
+
+                if event.key == pg.K_RIGHT:
+                    self.robot.step(Directions.EAST)
+                
 
     def update(self) -> None:
+        # self.robot.step(Directions.EAST)
         pass
         
 
@@ -57,3 +72,4 @@ class Game:
 
     def start(self) -> None:
         self.run()
+        

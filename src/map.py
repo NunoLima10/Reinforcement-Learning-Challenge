@@ -9,7 +9,7 @@ class Map:
         self.file_path = file_path
         self.robot_inicial_cell: Cell = None
         self.map = self.load_map()
-
+        
         self.rows = len(self.map[0])
         self.columns = len(self.map)
 
@@ -64,9 +64,25 @@ class Map:
             map.append(row)
         return map
     
-    def get_valid_moves(self, position: tuple) -> list[Directions]:
-        pass
+    def is_valid_position(self, x, y) -> bool:
+        return x >= 0 and y >= 0 and x < self.rows and y <  self.columns 
+    
 
+    def get_valid_moves(self, cell: Cell) -> list[Directions]:
+        
+        directions = [Directions.NORTH, Directions.SOUTH, Directions.WEST, Directions.EAST]
+
+        pass
+    
+  
+    def move(self, cell: Cell, direction: Directions) -> Cell:
+
+        new_position_x = cell.row_index + direction.x
+        new_position_y = cell.column_index + direction.y
+
+        return self.map[new_position_y][new_position_x] if self.is_valid_position(new_position_x, new_position_y) else None
+        
+    
     
     def draw(self, surface: pg.Surface) -> None:
         for row in  self.map:
@@ -75,8 +91,5 @@ class Map:
                       
         if self.show_grid:
             for line in self.lines:
-                pg.draw.line(surface,(0,0,0),line[0],line[1])
-
-                
-                   
+                pg.draw.line(surface,(0,0,0),line[0],line[1])    
             

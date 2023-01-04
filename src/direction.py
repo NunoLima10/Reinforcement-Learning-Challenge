@@ -1,9 +1,10 @@
-from enum import Enum
 
+from collections import namedtuple
 
-class Directions(Enum):
-    NORTH = "north"
-    SOUTH = "south"
-    WEST = "west"
-    EAST = "east" 
+class Directions():
+    vector_direction = namedtuple("vector_direction", "x y")
+    NORTH = vector_direction(0,1)
+    SOUTH = vector_direction(0,-1)
+    WEST = vector_direction(-1,0)
+    EAST = vector_direction(1,0) 
 

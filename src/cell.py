@@ -9,6 +9,8 @@ tiles = {
 class Cell:
     def __init__(self, cell_size: int, cell_type: str, position: tuple) -> None:
         self.cell_size = cell_size
+        self.row_index = int(position[0] / cell_size)
+        self.column_index = int(position[1] / cell_size)
         self.position = position
         self.rect = (position, (cell_size, cell_size))
         self.cell_type = cell_type
