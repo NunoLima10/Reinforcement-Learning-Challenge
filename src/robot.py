@@ -18,9 +18,15 @@ class Robot:
         if new_cell is not None:
             self.current_cell =  new_cell
 
+    def steps(self, direction_list: list[Directions]) -> None:
+        pass
+
     def update(self) -> None:
         pass
 
     def draw(self, surface) -> None:
         pg.draw.circle(surface,self.color, self.current_cell.center,self.map.cell_size / 4)
+
+    def __repr__(self) -> str:
+        return f"<Robot object color = {self.color}>"
       

@@ -5,7 +5,7 @@ from src.direction import Directions
 import pygame as pg
 
 class Game:
-    def __init__(self, title: str, map_path: str, cell_size: int , fps: int = 5) -> None:
+    def __init__(self, title: str, map_path: str, cell_size: int , fps: int = 30) -> None:
         self.title =  title
         self.map_path = map_path
         self.cell_size = cell_size
@@ -72,4 +72,7 @@ class Game:
 
     def start(self) -> None:
         self.run()
+
+    def __repr__(self) -> str:
+        return f"<Game object title = '{self.title}' window_size = {self.window_size}>"
         

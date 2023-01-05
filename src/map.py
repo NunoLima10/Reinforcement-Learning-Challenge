@@ -8,6 +8,7 @@ class Map:
         self.cell_size = cell_size
         self.file_path = file_path
         self.robot_inicial_cell: Cell = None
+        self.robot_char = "R"
         self.map = self.load_map()
         
         self.rows = len(self.map[0])
@@ -50,16 +51,17 @@ class Map:
         map = []
         for column_index, line in enumerate(content):
             row = []
-            for row_index, cell_type in enumerate(line):
-                if cell_type == '\n':
+            for row_index, cell_char in enumerate(line):
+                if cell_char == '\n':
                     continue
 
                 position = (row_index * self.cell_size, column_index * self.cell_size)
-                if cell_type == "R":
-                    cell_type = "-"
-                    self.robot_inicial_cell = Cell(self.cell_size, cell_type, position)
+
+                if cell_char == self.robot_char:
+                    self.robot_inicial_cell = Cell(self.cell_size, cell_char, position)
+                    cell_char = Cell.cell_types["space"].char
                
-                cell = Cell(self.cell_size, cell_type, position)
+                cell = Cell(self.cell_size, cell_char, position)
                 row.append(cell)
             map.append(row)
         return map
@@ -67,20 +69,25 @@ class Map:
     def is_valid_position(self, x, y) -> bool:
         return x >= 0 and y >= 0 and x < self.rows and y <  self.columns 
     
-
-    def get_valid_moves(self, cell: Cell) -> list[Directions]:
-        
-        directions = [Directions.NORTH, Directions.SOUTH, Directions.WEST, Directions.EAST]
-
-        pass
-    
   
     def move(self, cell: Cell, direction: Directions) -> Cell:
 
         new_position_x = cell.row_index + direction.x
         new_position_y = cell.column_index + direction.y
 
-        return self.map[new_position_y][new_position_x] if self.is_valid_position(new_position_x, new_position_y) else None
+        if not self.is_valid_position(new_position_x, new_position_y):
+            return None
+
+        new_cell = self.map[new_position_y][new_position_x]
+
+        if new_cell.cell_info == Cell.cell_types["wall"]:
+            return None
+
+        return new_cell
+
+    def get_valid_moves(self, cell: Cell) -> list[Directions]:
+        directions = [Directions.NORTH, Directions.SOUTH, Directions.WEST, Directions.EAST]
+        return [direction for direction in directions if self.move(cell, direction) is not None]   
         
     
     
@@ -91,5 +98,8 @@ class Map:
                       
         if self.show_grid:
             for line in self.lines:
-                pg.draw.line(surface,(0,0,0),line[0],line[1])    
+                pg.draw.line(surface,(0,0,0),line[0],line[1])
+
+    def __repr__(self) -> str:
+        return f"<Map object cell_size = {self.cell_size} file_path = {self.file_path}>"   
             
