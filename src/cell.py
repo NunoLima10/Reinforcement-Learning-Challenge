@@ -6,7 +6,8 @@ class Cell:
     cell_info = namedtuple("cell_inf","color char")
     cell_types = {
     "wall":cell_info( (0, 0, 0,) ,"#"),
-    "space":cell_info( (255, 255, 255) ,"-")
+    "space":cell_info( (255, 255, 255) ,"-"),
+    "goal_state":cell_info((225,0,0) ,"X")
     }
 
     def __init__(self, cell_size: int, cell_char: str, position: tuple) -> None:

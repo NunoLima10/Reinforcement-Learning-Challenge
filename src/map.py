@@ -2,6 +2,7 @@ from src.cell import Cell
 from src.direction import Directions
 
 import pygame as pg
+import math
 
 class Map:
     def __init__(self, cell_size: int, file_path: str) -> None:
@@ -60,6 +61,9 @@ class Map:
                 if cell_char == self.robot_char:
                     self.robot_inicial_cell = Cell(self.cell_size, cell_char, position)
                     cell_char = Cell.cell_types["space"].char
+                
+                if cell_char == Cell.cell_types["goal_state"].char:
+                    self.goal_state_position = position
                
                 cell = Cell(self.cell_size, cell_char, position)
                 row.append(cell)
@@ -89,7 +93,11 @@ class Map:
         directions = [Directions.NORTH, Directions.SOUTH, Directions.WEST, Directions.EAST]
         return [direction for direction in directions if self.move(cell, direction) is not None]   
         
+    def distance_to_goal_state(self, cell: Cell) -> int:
+        return math.dist(self.normalize(cell.position), self.normalize(self.goal_state_position))
     
+    def normalize(self, position) -> tuple:
+        return ((position[0] /self.width),position[1] /self.height)
     
     def draw(self, surface: pg.Surface) -> None:
         for row in  self.map:
