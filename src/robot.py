@@ -22,7 +22,7 @@ class Robot:
         self.current_cell =  new_cell
         distance = self.map.distance_to_goal_state(new_cell)
         is_goal_state = distance == 0 
-        reward = 0 if is_goal_state else 1 /distance * 10
+        reward = 100000000 if is_goal_state else 1 /distance * 10
         return  (is_goal_state,  reward)
             
        

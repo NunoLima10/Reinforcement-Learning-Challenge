@@ -67,11 +67,11 @@ class Game:
 
                 if event.key == pg.K_RIGHT:
                     _, reward = self.robot.step(Directions.EAST)
-                # print(reward)
+                print(reward)
                 
 
     def update(self) -> None:
-        self.randomly()
+        # self.randomly()
         pass
             
     def randomly(self) -> None:
@@ -92,12 +92,7 @@ class Game:
                 pg.quit()
                 ptl.plot(range(len(self.rewards)),self.rewards)
                 ptl.show()
-        
-        
-
-
-        
-
+    
     def draw(self) -> None:
         self.screen.fill(self.default_background_color)
         self.map.draw(self.screen)
@@ -105,6 +100,7 @@ class Game:
         pg.display.update()
 
     def start(self) -> None:
+        # self.map.draw(self.screen)
         self.run()
 
     def __repr__(self) -> str:
