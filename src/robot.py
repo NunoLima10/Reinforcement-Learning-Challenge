@@ -18,22 +18,14 @@ class Robot:
 
         if new_cell is None:
             return(False, 0)
-
         self.current_cell =  new_cell
-        distance = self.map.distance_to_goal_state(new_cell)
-        is_goal_state = distance == 0 
-        reward = 100000000 if is_goal_state else 1 /distance * 10
-        return  (is_goal_state,  reward)
+
+        return(self.map.is_goal_state(new_cell),  self.map.get_reward(new_cell))
             
-       
-    def steps(self, direction_list: list[Directions]) -> None:
-        pass
-    
     def random_step(self) -> tuple[bool, float]:
         valid_moves  = self.map.get_valid_moves(self.current_cell)
-        if valid_moves:
-            return self.step(random.choice(valid_moves))
-        return (False, 0)  
+        move = random.choice(valid_moves)
+        return self.step(move) if valid_moves else (False, 0)
     
     def update(self) -> None:
         pass

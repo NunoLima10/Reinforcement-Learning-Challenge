@@ -1,6 +1,12 @@
 from src.cell import Cell
 from src.direction import Directions
 
+from collections import  namedtuple
+from queue import Queue
+from collections import deque
+
+Node = namedtuple("Node","cell path") 
+
 import pygame as pg
 import math
 
@@ -38,8 +44,7 @@ class Map:
         for i in range(1,self.columns):
             x_start = 0
             y_start = i *  self.cell_size
-            x_end = x_start + self.width
-
+            x_end = self.width
             start_point = (x_start, y_start)
             end_point = (x_end, y_start)
             lines.append((start_point, end_point))
@@ -73,7 +78,6 @@ class Map:
     def is_valid_position(self, x, y) -> bool:
         return x >= 0 and y >= 0 and x < self.rows and y <  self.columns 
     
-  
     def move(self, cell: Cell, direction: Directions) -> Cell:
 
         new_position_x = cell.row_index + direction.x
@@ -91,14 +95,44 @@ class Map:
 
     def get_valid_moves(self, cell: Cell) -> list[Directions]:
         directions = [Directions.NORTH, Directions.SOUTH, Directions.WEST, Directions.EAST]
-        return [direction for direction in directions if self.move(cell, direction) is not None]   
-        
-    def distance_to_goal_state(self, cell: Cell) -> int:
-        return math.dist(self.normalize(cell.position), self.normalize(self.goal_state_position))
-    
+        return [direction for direction in directions if self.move(cell, direction) is not None]
+
     def normalize(self, position) -> tuple:
         return ((position[0] /self.width),position[1] /self.height)
+
+    def get_reward(self, cell: Cell) -> float:
+        distance = math.dist(self.normalize(cell.position), self.normalize(self.goal_state_position))
+        # distance = len(self.breadthFirstSearch(cell))
+        return  1 / distance if distance else 100
+
+    def breadthFirstSearch(self, start_cell: Cell) -> list[str]:
+        node_queue = deque()
+        visit_cells = set()
+
+        start_path = []
+        start_node = Node(start_cell, start_path)
+
+        node_queue.append(start_node)
+
+        while not len(node_queue) == 0:
+            cell, path = node_queue.pop()
+
+            if self.is_goal_state(cell):
+                return path
+
+            if cell not in visit_cells:
+               visit_cells.add(cell)
+
+            for direction in self.get_valid_moves(cell):
+                new_cell =  self.move(cell, direction)
+                if  new_cell not in visit_cells:
+                    new_path = [*path, direction]
+                    new_node = Node(new_cell, new_path)
+                    node_queue.append(new_node)
     
+    def is_goal_state(self, cell: Cell) -> bool:
+        return cell.position == self.goal_state_position
+
     def draw(self, surface: pg.Surface) -> None:
         for row in  self.map:
             for cell in row:
