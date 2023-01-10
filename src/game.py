@@ -2,7 +2,7 @@ from src.map import Map
 from src.robot import Robot
 from src.valueIteration_agent import ValueIterationAgent
 from src.direction import Directions
-from src.randomly import Randomly
+from randomly_agent import Randomly
 
 import pygame as pg
 import time
