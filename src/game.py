@@ -1,28 +1,27 @@
 from src.map import Map
 from src.robot import Robot
-from src.valueIteration_agent import ValueIterationAgent
 from src.direction import Directions
-from randomly_agent import Randomly
+from src.valueIteration_agent import ValueIterationAgent
+from src.randomly_agent import RandomlyAgent
 
 import pygame as pg
-import time
+
 class Game:
-    def __init__(self, title: str, map_path: str, cell_size: int , fps: int = 120) -> None:
+    def __init__(self, title: str, map_path: str, cell_size: int ,type: str ,fps: int = 30) -> None:
         self.title =  title
         self.map_path = map_path
         self.cell_size = cell_size
+        self.type = type
         self.fps = fps
         self.map = Map(self.cell_size, map_path)
         self.robot = Robot(self.map)
 
         # default
         self.default_background_color = (64,64,64)
-        self.setup()
+        self.value_iteration = ValueIterationAgent(self.map, self.robot)
+        self.randomly = RandomlyAgent(self.map, self.robot)
 
-        # self.value_iteration_agente = ValueIterationAgent(self.map)
-        self.randomly = Randomly(self.map, self.robot, 20_000, 30)
-        # for line in self.value_iteration_agente.values:
-        #     print( line)
+        self.setup()
 
     @property
     def window_size(self):
@@ -32,9 +31,7 @@ class Game:
         pg.init()
         pg.display.set_caption(self.title)
         self.clock = pg.time.Clock()
-
         self.screen = pg.display.set_mode(self.window_size)
-
 
     def run(self) -> None:
         while True:
@@ -53,46 +50,22 @@ class Game:
                 self.close()
 
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_UP:
-                     _, reward = self.robot.step(Directions.NORTH)
-
-                if event.key == pg.K_DOWN:
-                     _, reward = self.robot.step(Directions.SOUTH)
-
-                if event.key == pg.K_LEFT:
-                     _, reward = self.robot.step(Directions.WEST)
-
-                if event.key == pg.K_RIGHT:
-                    _, reward = self.robot.step(Directions.EAST)
-                print(reward)
+                if self.type == "play":
+                    self.robot.check_events(event.key)
+                
                 
 
     def update(self) -> None:
-        is_last_episode = self.randomly.update()
-        if is_last_episode:
-            exit()
-       
-        # win, reward = self.robot.step(self.value_iteration_agente.get_move(self.robot.current_cell))
-        # self.rewards.append(reward)
-        # if win:
-        #     print("win heehehehehehe")
-        #     pg.quit()
-        #     # fig = plt.figure()
-        #     # ax = fig.add_subplot(111)
+        if self.type == "random":
+            is_last_episode = self.randomly.update()
+            if is_last_episode:
+                exit()
 
-        #     # cax = ax.matshow(self.value_iteration_agente.values, interpolation='nearest', cmap='hot')
-        #     # fig.colorbar(cax)
-
-        #     # plt.savefig("figure2.png")
-        #     self.rewards.pop()
-        #     space = range(len(self.rewards))
-        #     average = np.average(self.rewards)
-        #     standard_deviation = np.std(self.rewards)
-        #     plt.plot(space,self.rewards)
-        #     plt.plot(space,[average for _ in space])
-        #     plt.savefig("figure3.png")
+        if self.type == "value":
+            win = self.value_iteration.update()
+            if win:
+                exit()
         
-        pass
             
     def draw(self) -> None:
         self.screen.fill(self.default_background_color)
@@ -101,7 +74,6 @@ class Game:
         pg.display.update()
 
     def start(self) -> None:
-        self.time_start = time.time()
         self.run()
 
     def __repr__(self) -> str:

@@ -2,13 +2,11 @@ from src.map import Map
 from src.robot import Robot
 from matplotlib import pyplot as plt
 
-
-import random
 import time
 import numpy as np
 
-class Randomly:
-    def __init__(self,map: Map, robot: Robot, max_steps_number: int,  max_episode_number: int) -> None:
+class RandomlyAgent:
+    def __init__(self,map: Map, robot: Robot) -> None:
         self.map = map
         self.robot = robot
         self.max_steps_number = 20_000
@@ -17,7 +15,7 @@ class Randomly:
         self.episode_number = 0
         self.episode_reward = 0 
         self.rewards = []
-        self.space = range(max_episode_number)
+        self.space = range(self.max_episode_number)
         self.average = 0
         self.standard_deviation = 0 
         self.start_time = time.time()
