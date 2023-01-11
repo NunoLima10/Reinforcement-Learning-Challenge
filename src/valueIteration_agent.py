@@ -2,6 +2,7 @@ from src.cell import Cell
 from src.map import Map
 from src.robot import Robot
 from src.direction import Directions
+from src.color_printer import ColorPrinter
 from matplotlib import pyplot as plt
 
 import  random
@@ -17,7 +18,7 @@ class ValueIterationAgent:
         self.max_iteration = 30
         self.max_steps_number = 20_000
         self.steps_number = 0
-        self.iteration_number = 0
+        self.iteration_number = 1
         self.episode_reward = 0 
         self.rewards = []
         self.space = range(self.max_iteration)
@@ -68,7 +69,7 @@ class ValueIterationAgent:
         self.run_value_iterations()
     
         self.rewards.append(self.episode_reward / self.steps_number)
-        print(f" iteration {self.iteration_number} episode_reward / steps_number: {self.episode_reward / self.steps_number}")
+        print(f"iteration {self.iteration_number} episode_reward / steps_number: {ColorPrinter.colored(self.episode_reward / self.steps_number)}")
         self.iteration_number += 1
         self.steps_number = 0
         self.episode_reward = 0
@@ -80,31 +81,40 @@ class ValueIterationAgent:
         self.steps_number += 1
         self.episode_reward += reward
 
-        if win or self.steps_number > self.max_steps_number:
-            self.reset_episode()
-        
-        last_iteration = self.iteration_number >= self.max_iteration
+        last_iteration = self.iteration_number > self.max_iteration
         if last_iteration:
             self.calculate_statistics()
-            # self.save_plot()
-            self.save_plot2()
+            self.print_statistics()
+            self.save_plots()
+        
+        if win or self.steps_number > self.max_steps_number:
+            self.reset_episode()
         return last_iteration
 
-    def print_statistics(self) -> None:
-        pass
-
-    def save_plot(self) -> None:
-        figure = plt.figure()
-        ax = figure.add_subplot(111)
-        cax = ax.matshow(self.values, interpolation='nearest', cmap='hot')
-        figure.colorbar(cax)
+    def save_plots(self) -> None:
+        plt.figure(1)
+        plt.title("Values heat map")
+        heat_map = plt.subplot(111)
+        cax = heat_map.matshow(self.values, interpolation='nearest', cmap='hot')
+        plt.colorbar(cax)
         plt.savefig("figure2.png")
+
+        plt.figure(2)
+        plt.title("ValueIterationAgent")
+        plt.xlabel("iteration")
+        plt.ylabel("iteration_reward / steps_number")       
+        plt.plot(self.space, self.rewards)
+        plt.plot(self.space,[self.average for _ in self.space]) 
+        plt.tight_layout()  
+        plt.savefig("figure3.png")
+        
     
     def save_plot2(self) -> None:
         plt.xlabel("iteration")
         plt.ylabel("iteration_reward / steps_number")       
         plt.plot(self.space, self.rewards)
-        plt.plot(self.space,[self.average for _ in self.space])   
+        plt.plot(self.space,[self.average for _ in self.space]) 
+        plt.tight_layout()  
         plt.savefig("figure3.png")
 
     def calculate_statistics(self) -> None:
@@ -112,6 +122,13 @@ class ValueIterationAgent:
         self.average = np.average(self.rewards)
         self.standard_deviation = np.std(self.rewards)
 
+    def print_statistics(self) -> None:
+        ColorPrinter.show(f"{'='*10}ValueIterationAgent:{'='*10}","warning")
+        print(f"max steps number: {ColorPrinter.colored(self.max_steps_number)}")
+        print(f"max iteration: {ColorPrinter.colored(self.max_iteration)}")
+        print(f"average reward / steps_number: {ColorPrinter.colored(round(self.average, 2))}")
+        print(f"standard_deviation reward / steps_number: {ColorPrinter.colored(round(self.standard_deviation,2))}")
+        print(f"time took {ColorPrinter.colored(round(self.time,2))} sec")
 
 
        
