@@ -4,13 +4,15 @@ from src.robot import Robot
 from src.direction import Directions
 from matplotlib import pyplot as plt
 
+
+import  random
 class ValueIterationAgent:
     def __init__(self, map: Map, robot: Robot) -> None:
         self.map = map
         self.robot = robot
         self.alpha = 0.2
         self.discount = 0.9
-        self.iterations = 30
+        self.iterations = 1
         self.values = self.inicialize_values()
         self.run_value_iterations()
         self.save_plot()
@@ -49,7 +51,10 @@ class ValueIterationAgent:
             new_cell = self.map.move(cell, move)
             values.append(self.values[new_cell.row_index][new_cell.column_index])
         max_index = values.index(max(values))
-        return moves[max_index]
+        max_value = max(values)
+        max_values_index = [index for index,value in enumerate(values) if value == max_value]
+        # max_index = values.index(max)
+        return moves[random.choice(max_values_index)]
 
     def update(self) -> bool:
         direction = self.get_move(self.robot.current_cell)
@@ -62,6 +67,8 @@ class ValueIterationAgent:
     def save_plot(self) -> None:
         figure = plt.figure()
         ax = figure.add_subplot(111)
+        for line in self.values:
+            print(line)
         cax = ax.matshow(self.values, interpolation='nearest', cmap='hot')
         figure.colorbar(cax)
         plt.savefig("figure2.png")

@@ -10,7 +10,7 @@ class Map:
         self.file_path = file_path
         self.robot_inicial_cell: Cell = None
         self.robot_char = "R"
-        self.goal_state_reward = 15
+        self.goal_state_reward = 1
         
         self.map = self.load_map()
         
@@ -96,7 +96,7 @@ class Map:
 
     def get_reward(self, cell: Cell) -> float:
         distance = math.dist(self.normalize(cell.position), self.normalize(self.goal_state.position))
-        return  1 / distance if distance else self.goal_state_reward
+        return  0 if distance else self.goal_state_reward
 
     def is_goal_state(self, cell: Cell) -> bool:
         return cell.position == self.goal_state.position
