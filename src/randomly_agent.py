@@ -30,11 +30,7 @@ class RandomlyAgent:
         
         if win or self.steps_number > self.max_steps_number:
             print(f"episode {self.episode_number} total reward {self.episode_reward/self.steps_number}")
-            self.rewards.append(self.episode_reward/self.steps_number)
-            self.episode_number += 1
-            self.steps_number = 0
-            self.episode_reward = 0
-            self.robot.current_cell = self.map.robot_inicial_cell
+            self.reset_episode()
 
         if self.episode_number > self.max_episode_number:
                 self.calculate_statistics()
@@ -44,6 +40,12 @@ class RandomlyAgent:
 
         return is_last_episode
                 
+    def reset_episode(self) -> None:
+        self.rewards.append(self.episode_reward/self.steps_number)
+        self.episode_number += 1
+        self.steps_number = 0
+        self.episode_reward = 0
+        self.robot.current_cell = self.map.robot_inicial_cell
 
     def calculate_statistics(self) -> None:
         self.rewards.pop()

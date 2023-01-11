@@ -10,7 +10,7 @@ class Map:
         self.file_path = file_path
         self.robot_inicial_cell: Cell = None
         self.robot_char = "R"
-        self.goal_state_reward = 1
+        self.goal_state_reward = 100
         
         self.map = self.load_map()
         

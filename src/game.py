@@ -1,6 +1,5 @@
 from src.map import Map
 from src.robot import Robot
-from src.direction import Directions
 from src.valueIteration_agent import ValueIterationAgent
 from src.randomly_agent import RandomlyAgent
 
