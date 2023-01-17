@@ -10,12 +10,13 @@ import numpy as np
 import time
 class ValueIterationAgent:
     def __init__(self, map: Map, robot: Robot) -> None:
+        # offline planner
         self.map = map
         self.robot = robot
         self.alpha = 0.2
         self.discount = 0.9
 
-        self.max_iteration = 30
+        self.max_iteration = 50
         self.max_steps_number = 20_000
         self.steps_number = 0
         self.iteration_number = 1
@@ -108,15 +109,6 @@ class ValueIterationAgent:
         plt.tight_layout()  
         plt.savefig("figure3.png")
         
-    
-    def save_plot2(self) -> None:
-        plt.xlabel("iteration")
-        plt.ylabel("iteration_reward / steps_number")       
-        plt.plot(self.space, self.rewards)
-        plt.plot(self.space,[self.average for _ in self.space]) 
-        plt.tight_layout()  
-        plt.savefig("figure3.png")
-
     def calculate_statistics(self) -> None:
         self.time = time.time() - self.start_time
         self.average = np.average(self.rewards)

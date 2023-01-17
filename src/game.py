@@ -1,7 +1,8 @@
 from src.map import Map
 from src.robot import Robot
-from src.valueIteration_agent import ValueIterationAgent
 from src.randomly_agent import RandomlyAgent
+from src.valueIteration_agent import ValueIterationAgent
+from src.qlearning_agent import QLearningAgent
 
 import pygame as pg
 
@@ -17,8 +18,9 @@ class Game:
 
         # default
         self.default_background_color = (64,64,64)
-        self.value_iteration = ValueIterationAgent(self.map, self.robot)
         self.randomly = RandomlyAgent(self.map, self.robot)
+        self.value_iteration = ValueIterationAgent(self.map, self.robot)
+        self.q_learning = QLearningAgent(self.map, self.robot)
 
         self.setup()
 
@@ -52,20 +54,22 @@ class Game:
                 if self.type == "play":
                     self.robot.check_events(event.key)
                 
-                
-
     def update(self) -> None:
         if self.type == "random":
-            is_last_episode = self.randomly.update()
-            if is_last_episode:
+            finished = self.randomly.update()
+            if finished:
                 exit()
 
         if self.type == "value":
-            win = self.value_iteration.update()
-            if win:
+            finished = self.value_iteration.update()
+            if finished:
+                exit()
+
+        if self.type == "q-l":
+            finished = self.q_learning.update()
+            if finished:
                 exit()
         
-            
     def draw(self) -> None:
         self.screen.fill(self.default_background_color)
         self.map.draw(self.screen)
