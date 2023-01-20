@@ -59,7 +59,7 @@ class RandomlyAgent:
         plt.ylabel("episode_reward / steps_number")       
         plt.plot(self.space, self.rewards)
         plt.plot(self.space,[self.average for _ in self.space])   
-        plt.savefig("figure1.png")
+        plt.savefig("RandomlyAgent.png")
     
     def print_statistics(self) -> None:
         ColorPrinter.show(f"{'='*10}RandomlyAgent{'='*10}","warning")

@@ -3,7 +3,6 @@ from src.direction import Directions
 
 import pygame as pg
 import math
-
 class Map:
     def __init__(self, cell_size: int, file_path: str) -> None:
         self.cell_size = cell_size
@@ -50,23 +49,24 @@ class Map:
         with open(self.file_path,"r") as file:
             content = file.readlines()
         map = []
+        id = 0
         for column_index, line in enumerate(content):
             row = []
             for row_index, cell_char in enumerate(line):
                 if cell_char == '\n':
                     continue
-
                 position = (row_index * self.cell_size, column_index * self.cell_size)
 
                 if cell_char == self.robot_char:
-                    self.robot_inicial_cell = Cell(self.cell_size, cell_char, position)
+                    self.robot_inicial_cell = Cell(id,self.cell_size, cell_char, position)
                     cell_char = Cell.cell_types["space"].char
                 
                 if cell_char == Cell.cell_types["goal_state"].char:
-                    self.goal_state = Cell(self.cell_size, cell_char, position)
+                    self.goal_state = Cell(id,self.cell_size, cell_char, position)
                
-                cell = Cell(self.cell_size, cell_char, position)
+                cell = Cell(id,self.cell_size, cell_char, position)
                 row.append(cell)
+                id += 1
             map.append(row)
         return map
     

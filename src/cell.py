@@ -1,7 +1,6 @@
 from collections import namedtuple
 import pygame as pg
 
-
 class Cell:
     cell_info = namedtuple("cell_inf","color char")
     cell_types = {
@@ -10,7 +9,8 @@ class Cell:
     "goal_state":cell_info((225,0,0) ,"X")
     }
 
-    def __init__(self, cell_size: int, cell_char: str, position: tuple) -> None:
+    def __init__(self,id: int, cell_size: int, cell_char: str, position: tuple) -> None:
+        self.id = id
         self.cell_size = cell_size
         self.position = position
         self.row_index = int(position[0] / cell_size)

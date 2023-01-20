@@ -7,11 +7,11 @@ from src.qlearning_agent import QLearningAgent
 import pygame as pg
 
 class Game:
-    def __init__(self, title: str, map_path: str, cell_size: int ,type: str ,fps: int = 30) -> None:
+    def __init__(self, title: str, map_path: str, cell_size: int , game_type: str ,fps: int = 30) -> None:
         self.title =  title
         self.map_path = map_path
         self.cell_size = cell_size
-        self.type = type
+        self.game_type = game_type
         self.fps = fps
         self.map = Map(self.cell_size, map_path)
         self.robot = Robot(self.map)
@@ -51,21 +51,21 @@ class Game:
                 self.close()
 
             if event.type == pg.KEYDOWN:
-                if self.type == "play":
+                if self.game_type == "play":
                     self.robot.check_events(event.key)
                 
     def update(self) -> None:
-        if self.type == "random":
+        if self.game_type == "random":
             finished = self.randomly.update()
             if finished:
                 exit()
 
-        if self.type == "value":
+        if self.game_type == "value":
             finished = self.value_iteration.update()
             if finished:
                 exit()
 
-        if self.type == "q-l":
+        if self.game_type == "q-l":
             finished = self.q_learning.update()
             if finished:
                 exit()
